@@ -1,0 +1,204 @@
+<meta charset="utf-8"/>
+<layout name="layout"/>
+<include file="Public:box"/>
+
+
+
+<load href="__PUBLIC__/assets/js/jquery-2.0.3.min.js"/>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+    </script>
+
+    <ul class="breadcrumb">
+        <li >
+            <a href="#" id="text1">系统管理</a>
+        </li>
+        <li class="active" id="text2">网络管理</li>
+    </ul><!-- .breadcrumb -->
+
+   <!--  <div class="nav-search" id="nav-search">
+       <form class="form-search" action="{:U('admin.php/Virtual/index')}" id="search" method="get">
+                   <span class="input-icon">
+                       <input type="text" name="searchtext" value="{$searchtext}" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                       <i class="icon-search nav-search-icon" onclick="document.getElementById('search').submit();"></i>
+                   </span>
+       </form>
+   </div> --><!-- #nav-search -->
+</div>
+<div class="page-content">
+    <!-- <div class="page-header">
+        <h1>
+            虚拟化管理
+            <small>
+                <i class="icon-double-angle-right"></i>
+               网络管理
+            </small>
+        </h1>
+    </div> --><!-- /.page-header -->
+    <form action="{:U('admin.php/System/networkUpdate')}" method="post" id="form1">
+        <div class="profile-user-info profile-user-info-striped">
+            <div class="profile-info-row">
+                <div class="profile-info-name"> IP地址</div>
+
+                <div class="profile-info-value">
+                    <span><input type="text" id="address" name="address" value="{$network['address']}" style="width:232px;"/></span>
+                </div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name"> 子网掩码 </div>
+
+                <div class="profile-info-value">
+                    <span><input type="text" id="netmask" name="netmask" value="{$network['netmask']}" style="width:232px;"/></span>
+                </div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name"> 网关 </div>
+
+                <div class="profile-info-value">
+                    <span><input type="text" name="gateway" id="gateway" value="{$network['gateway']}" style="width:232px;"/></span>
+                </div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name"> DNS </div>
+
+                <div class="profile-info-value">
+                    <span><input type="text" name="dns"  id="dns" value="{$network['dns']}" style="width:232px;"/></span>
+                </div>
+            </div>
+
+            <div class="profile-info-row" style="height: 46px;">
+                <div class="profile-info-name" style="line-height: 37px;">操作 </div>
+
+                <div class="profile-info-value">
+                    <li style="list-style:none;">
+                        <span><button type="button" class="my_btn my_btn_xs my_btn_green edit_network" style="width:100px;margin-top:0"><i class="icon-ok bigger-120"></i>提交</button></span>
+                        <span style="padding-left: 15px;"> <button type="button" class="my_btn my_btn_xs my_btn_gray" style="width:100px;margin-top:0" onclick="$('#form1')[0].reset()"><i class="icon-remove bigger-120"></i>取消</button></span></li>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="alert alert-block alert-danger alert-show" style="width:300px;display:none;position:fixed;">
+    <button type="button" class="close" data-dismiss="alert">
+        <i class="icon-remove"></i>
+    </button>
+    <p>
+        <strong>
+            <i class=" icon-warning-sign"></i>
+           警告！
+        </strong>
+        请确保您填写的配置是正确的，否则可能导致网络不可用！修改IP后会自动重启！
+    </p>
+    <p>
+        <button class="my_btn my_btn_sm my_btn_green pull-right cancel_net">取消</button>
+        <button class="my_btn my_btn_sm my_btn_red confirm_net" style="margin-left: 147px;">确定</button>
+    </p>
+</div>
+<script src="__PUBLIC__/assets/js/bootbox.min.js"></script>
+<script src="__PUBLIC__/js/bootbox.js"></script>
+<script>
+    $(function(){
+        pLeftMenu(4,5);
+        // $.ajax({
+        //     url:"{:U('admin.php/System/networkIndex')}",
+        //     type:"get",
+        //     dataType:"json",
+        //     success:function(data){
+                // $("#address").val(data.address);
+                // $("#netmask").val(data.netmask);
+                // $("#gateway").val(data.gateway);
+                // $("#dns").val(data.dns);
+        //     }
+        // });
+                // $("#address").val(data.address);
+                // $("#netmask").val(data.netmask);
+                // $("#gateway").val(data.gateway);
+                // $("#dns").val(data.dns);
+        /*$(".edit_network").unbind(ace.click_event).on(ace.click_event, function (event) {
+            bootbox.dialog({
+                message: "<span class='alert alert-block alert-danger alert-show'><strong><i class='icon-warning-sign'></i>警告！</strong>请确保您填写的配置是正确的，否则可能导致网络不可用</span>",
+                buttons:            
+                        {
+                            "确认" :
+                            {
+                                "label" : "确认!",
+                                "className" : "btn-xs btn-success",
+                                "callback": function() {
+                                    $("#form1").submit();
+                                }
+                            },
+                            "取消" :
+                            {
+                                "label" : "取消!",
+                                "className" : "btn-xs btn-danger",
+                                "callback": function() {
+                                }
+                            }, 
+                        }
+            });
+        });*/
+        $(".edit_network").click(function(){
+            var add = $("#address").val();
+            var net = $("#netmask").val();
+            var gate = $("#gateway").val();
+            var dns = $("#dns").val();
+            //alert(add);
+            $.ajax({
+                url:"{:U('admin.php/System/networkCheck')}",
+                type:"GET",
+                data:{'add':add,'net':net,'gate':gate,'dns':dns},
+                success:function(data){
+                    //alert(data);
+                    if(data == 'repeat'){
+                        bootbox.alert("您没有进行任何修改，请确认修改后再次提交！");
+                    }else{
+                        bootbox.dialog({
+                            message: "<span class='alert alert-block alert-danger alert-show'><strong><i class='icon-warning-sign'></i>警告！</strong>请确保您填写的配置是正确的，否则可能导致网络不可用</span>",
+                            buttons:            
+                                    {
+                                        "确认" :
+                                        {
+                                            "label" : "确认!",
+                                            "className" : "btn-xs btn-success",
+                                            "callback": function() {
+                                                //alert('aaaaaaaaaaaaaa');
+                                                $("#form1").submit();
+                                            }
+                                        },
+                                        "取消" :
+                                        {
+                                            "label" : "取消!",
+                                            "className" : "btn-xs btn-danger",
+                                            "callback": function() {
+                                            }
+                                        }, 
+                                    }
+                        });
+                    }
+
+                }
+            });
+
+        });
+        /*******控制alert弹框的位置*******/
+        $(window).resize(function(){
+            var ScreenWidth = $(window).width();
+            var ScreenHeight = $(window).height();
+            var DivWidth = $(".alert-show").width();
+            var DivHeight = $(".alert-show").height();
+            var left = parseInt((ScreenWidth-DivWidth)/2);
+            var right = parseInt((ScreenHeight-DivHeight)/2);
+            $(".alert-show").css({"left":left,"right":right});
+        });
+        $(window).resize();
+        /*******控制alert弹框的位置*******/
+
+    });
+
+
+</script>

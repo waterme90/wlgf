@@ -1,0 +1,162 @@
+<div class="page-header" style="border-bottom:0px;padding-bottom:0px;">
+       <!--  <a class="my_btn my_btn_xs my_btn_green titleshow" style="margin: 0px 10px 20px 20px;"title="导入课件" data-rel="tooltip" data-placement="top"  href="{:U('admin.php/System/imageImport')}">
+            <i class="icon-cloud-upload bigger-120"></i>
+            导入
+        </a>
+         <a class="my_btn my_btn_xs my_btn_green titleshow" style="margin: 0px 10px 20px 20px;"title="导出课件"data-rel="tooltip" data-placement="top"  href="{:U('admin.php/System/imagedomainort')}">
+            <i class="icon-cloud-download  bigger-120"></i>
+            导出
+        </a> -->
+        <a class="my_btn my_btn_xs my_btn_red bootbox-confirm checkAll" style="margin: 0px 10px 20px 20px;" title="关闭虚拟机" data-rel="tooltip" data-placement="top" >
+           <!--  <i class="icon-trash bigger-120"></i> -->
+            关闭虚拟机
+        </a>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="table-responsive" >
+                    <table id="sample-table-1" class="table table-striped  table-hover" >
+                        <thead>
+                          <tr>
+                              
+                              <th class="center" style="width:50px;padding-left:30px">
+                                  <label>
+                                      <input type="checkbox" class="ace"/>
+                                      <span class="lbl"></span>
+                                  </label>
+                              </th>
+                            
+                              <!-- <th>序号</th> -->
+                                <th style="width:120px;text-align:center">序号</th>
+
+                                <th>虚拟机名称</th>
+                                <th>实验名称</th>
+                              
+                                <th>虚拟机IP</th>
+                                <th>所属主机</th>
+                                <th>创建人</th>
+                                <th>状态</th>
+								                <th>操作</th>
+                                
+                          </tr>
+                        </thead>
+                        <tbody>
+                       
+                            <volist name="list" id="domain" key="k">
+                                <tr>
+                                     <td class="center" style="width:50px;padding-left:30px">
+                                        <label>
+                                            <input type="checkbox" class="ace"   value="{$domain.domain_id}"  name="domains"/>
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </td>
+                                   
+                                   <td style="width:120px;text-align:center">{$k}</td>
+                                   <td>{$domain.domain_name}</td>
+
+                                    <td>
+                                    <span class="spanshow" my-title="{$domain.exp_abstract}" data-rel="popover" data-placement="top" data-content="{$domain.exp_abstract}"  >{$domain.exp_name}</span>
+                                    </td>
+                                    <td><eq name="domain.domain_ip" value=''>无<else/>{$domain.domain_ip}</eq></td>
+
+                                   <td><eq name="domain.host_ip" value=''><else/>{$domain.host_ip}</eq></td>
+                                   <td>{$domain.real_name}</td>
+                                   <td><eq name="domain.domain_status" value='0'><span class="lable lable-sn lable-blue">未运行</span><else/><span class="label label-sm label-warning">运行</span></eq></td>
+
+                                    <td>
+                                        <div>
+                                         
+                                            <!-- <a href="{:U('admin.php/System/domainImport',array('domain_sn'=>$domain['domain_sn']))}" style="text-decoration: none;">
+                                                <button class="my_btn my_btn_sm my_btn_green edit titleshow" title="导入课件" data-rel="tooltip" data-placement="top" >
+                                                    <i class="icon-cloud-upload bigger-120" ></i>
+                                                </button>
+                                            </a>
+                                          
+                                            <a href="{:U('admin.php/System/domaindomainort',array('domain_sn'=>$domain['domain_sn']))}"style="text-decoration: none;">
+                                                <button class="my_btn my_btn_sm my_btn_green  edit titleshow domainort" title="导出课件" data-rel="tooltip" data-placement="top"name="{$domain.img_basic_id}">
+                                                    <i class="icon-cloud-download  bigger-120" ></i>
+
+                                                </button>
+                                            </a>
+                                             -->
+                                            
+                                            <a style="text-decoration: none;">
+                                               <button class="my_btn my_btn_sm my_btn_red edit delete" title="强制关机" data-rel="tooltip" data-placement="top" name="{$domain.domain_id}">
+                                                    <i class="icon-remove bigger-120" ></i>
+                                                </button>
+                                            </a>
+                                          
+                                        </div>    
+                                        
+                                        
+                                    </td>
+                                </tr>
+                            </volist>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<load href="__PUBLIC__/js/bootbox.js" />
+<script>
+  $('[data-rel=tooltip]').tooltip();
+  //多选框
+  $('table th input:checkbox').on('click' , function(){
+            var that = this;
+            $(this).closest('table').find('tr > td:first-child input:checkbox')
+                    .each(function(){
+                        this.checked = that.checked;
+                        $(this).closest('tr').toggleClass('selected');
+                    });
+
+         });
+    //全选关闭
+   $(".checkAll").click(function(){
+       
+        var str = new Array();
+       
+        var len = $('[name=domains]:checkbox:checked').length;
+        
+        $('[name=domains]:checkbox:checked').each(function(){
+            
+            str.push($(this).val());
+
+        });
+
+        isdel(str);
+        
+   });
+   //单个关闭
+   $(".delete").click(function(){
+      var str = new Array();
+      var id = $(this).attr("name");
+      str.push(id);
+      isdel(str);
+   });
+   function isdel(str){
+      if(str.length==0) return ;
+      bootbox.confirm("确认关闭吗？",function(re){
+        if(re){
+            $.ajax({
+              type:"GET",
+              data:{str:str},
+              url:"{:U('admin.php/System/domainShutdown')}",
+              dataType:"json",
+              success:function(data){
+                switch(data){
+                  case "success":bootbox.alert("关闭成功！");currContent();break;
+                  case "error":bootbox.alert("关闭失败！请重试！");break;
+                }
+              }
+            });
+        }else{
+          return true;
+        }
+      });
+   }
+</script>

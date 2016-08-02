@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>网络安全攻防实训平台</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- basic styles -->
+
+
+		<load href="__PUBLIC__/files/experiment/styles.css" />
+		<load href="__PUBLIC__/assets/css/dropzone.css" />
+    	<load href="__PUBLIC__/data/styles.css" />
+		<load href="__PUBLIC__/assets/css/bootstrap.min.css" />
+		<load href="__PUBLIC__/assets/css/jquery-ui-1.10.3.custom.min.css" />
+		<load href="__PUBLIC__/assets/css/chosen.css" />
+		<load href="__PUBLIC__/assets/css/font-awesome.min.css" />
+		<load href="__PUBLIC__/assets/css/jquery-ui-1.10.3.full.min.css" />
+		<load href="__PUBLIC__/assets/css/datepicker.css" />
+		<load href="__PUBLIC__/assets/css/ui.jqgrid.css" />
+		<load href="__PUBLIC__/assets/css/ace.min.css" />
+		<load href="__PUBLIC__/assets/css/ace-rtl.min.css" />
+		<load href="__PUBLIC__/assets/css/ace-skins.min.css" />
+		<load href="__PUBLIC__/css/style.css" />
+
+		<load href="__PUBLIC__/js/select.js" />
+		<!-- <load href="__PUBLIC__/js/jquery.SuperSlide.js" /> -->
+		<load href="__PUBLIC__/js/jquery.min.js" />
+		<load href="__PUBLIC__/js/jquery.poshytip.js" />
+		<load href="__PUBLIC__/js/jq.validate.js" />
+		<load href="__PUBLIC__/assets/js/ace-extra.min.js" /> 
+		<load href="__PUBLIC__/assets/js/ace-elements.min.js" />
+		<!-- <load href="__PUBLIC__/assets/css/dropzone.css" /> -->
+		<load href="__PUBLIC__/assets/js/bootbox.min.js" />
+		<load href="__PUBLIC__/js/bootbox.js" />
+		<!-- <script src="__PUBLIC__/assets/js/dropzone.min.js"></script> -->
+
+
+		 <script>
+		    jQuery.noConflict(); //防止jquery库的相互冲突。不加可能会跟ace的js库函数冲突
+		    $(function(){
+		        // pLeftMenu();
+		        bootbox.setDefaults({locale:"zh_CN"});      // 将“取消”、“确认”设置为中文
+//$("#nav-search-input").typeahead({
+//            source: ''
+//        })
+		    });
+		</script>
+		<script>
+        /*通过判断左侧链接的路径是否和浏览器的路径相等，相等时给当前元素的父元素，以及父元素的父li元素添加active属性
+        特别的，当点击子页面进行跳转时（如在实验列表界面点击新建实验时），此时并不是点击的左侧链接，可以通过在当前页面调用如
+        pLeftMenu(2,1)函数，第一个参数外层的li的索引,第二个参数是里面的li，注意从1开始，因为函数里已经减了1*/
+        //左侧导航的显示
+         function pLeftMenu()
+        {
+            var level1 = arguments[0]?arguments[0]:0;
+            var level2 = arguments[1]?arguments[1]:0;
+            var olevel1;var olevel2;
+
+            if(level1===0||level2===0){
+
+                var obj = $(".submenu li > a");
+
+                for(var i=0;i<obj.length;i++){
+
+                    var thisobj = obj[i];
+                    if(location.href.toLocaleLowerCase() == thisobj.href.toLocaleLowerCase())
+                    {
+                        olevel1 = $(thisobj).parent().parents('li');
+                        olevel2 = $(thisobj).parent();
+                        break;
+                    }
+                }
+
+            }else{
+
+                olevel1 = $(".nav-list > li").eq(level1-1);
+                olevel2 = olevel1.find(".submenu > li").eq(level2-1);
+
+            }
+            olevel1.addClass("open active");
+            olevel2.addClass("active");
+            var text1 = $('.open a span').text();
+            $('#text1').text(text1);
+            $('#text1').attr('href',$('.open .submenu a')[0].href);
+            var text2 = $('.submenu .active a').text();
+            if(text2.length == 0)   $('#text2').text(text1);
+            else {
+                $('#text2').text(text2);
+                $("#text2").attr("href",$('.submenu .active a')[0].href);
+            }
+            return false;
+        }
+    </script>
+
+
+		
+	</head>
+
+	<body class="skin-1">
+		<div class="navbar navbar-default" id="navbar">
+			<script type="text/javascript">
+				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="navbar-container" id="navbar-container">
+				<div class="navbar-header pull-left">
+					<a href="#" class="navbar-brand">
+						<small>
+							<!-- <i class="icon-leaf"></i> -->
+							<img src="__PUBLIC__/assets/images/logo.png" style="margin-top:-2px">
+							网络安全攻防实训平台
+						</small>
+					</a><!-- /.brand -->
+				</div><!-- /.navbar-header -->
+
+				<div class="navbar-header pull-right" role="navigation">
+					<ul class="nav ace-nav">
+						<li class="grey">
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+								<img class="nav-user-photo" src="{$Think.session.photo}" alt="Jason's Photo" />
+								<span class="user-info">
+									<small>欢迎光临,</small>
+									{$Think.session.name}
+								</span>
+
+								<i class="icon-caret-down"></i>
+							</a>
+
+							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+								<li>
+									<a href="{:U('admin.php/AdminUser/showIndividual')}" style="color: #4B4B4B;text-decoration:none">
+										<i class="icon-user"></i>
+										个人资料
+									</a>
+								</li>
+
+								<li class="divider"></li>
+
+								<li>
+									<a href="{:U('admin.php/LoginShow/logout')}" style="color: #4B4B4B;text-decoration:none">
+										<i class="icon-off"></i>
+										退出
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul><!-- /.ace-nav -->
+				</div><!-- /.navbar-header -->
+			</div><!-- /.container -->
+		</div>

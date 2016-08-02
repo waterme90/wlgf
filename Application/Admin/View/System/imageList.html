@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<style>
+*{border:none;}
+</style>
+<script src="__PUBLIC__/assets/js/bootbox.min.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/assets/css/colorbox.css" />
+
+
+        <if condition="($attribute eq 'basic')">
+         <div class="page-header" style="border-bottom:0px;padding-bottom:0px;">
+            <a class="my_btn my_btn_xs my_btn_green titleshow" style="margin: 0px 10px 20px 20px;" title="上传镜像" data-rel="tooltip" data-placement="top"  href="{:U('admin.php/System/imageAdd')}">
+                <i class="icon-plus-sign bigger-120"></i>
+                上传镜像
+            </a>
+           <!--  <a class="my_btn my_btn_xs my_btn_red bootbox-confirm checkAll titleshow" style="margin: 0px 10px 20px 20px;" title="删除工程">
+                <i class="icon-trash bigger-120"></i>
+                删除
+            </a> -->
+        </div><!-- /.page-header -->
+        </if>
+        <switch name="attribute">
+            <case value='basic'>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-responsive" >
+                                    <table id="sample-table-1" class="table table-striped  table-hover" >
+                                        <thead>
+                                          <tr>
+                                              
+                                              <!-- <th class="center" style="width:50px;padding-left:30px">
+                                                  <label>
+                                                      <input type="checkbox" class="ace" name="images"/>
+                                                      <span class="lbl"></span>
+                                                  </label>
+                                              </th> -->
+                                            
+                                              <!-- <th>序号</th> -->
+                                                <th style="width:120px;text-align:center">序号</th>
+
+                                                <th>镜像名称</th>
+                                                <th>操作系统</th>
+                                              
+                                                <th>位数</th>
+                                                <th>大小</th>
+                                                <th>属性</th>
+                                                <th>操作</th>
+                                                
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                       
+                                            <volist name="list" id="image" key="k">
+                                                <tr>
+                                                   <!--   <td class="center" style="width:50px;padding-left:30px">
+                                                        <label>
+                                                            <input type="checkbox" class="ace"   value="{$image.img_basuc_id}"  name="basic"/>
+                                                            <span class="lbl"></span>
+                                                        </label>
+                                                    </td> -->
+                                                   
+                                                   <td style="width:120px;text-align:center">{$k}</td>
+
+                                                    <td>
+                                                    <span class="spanshow" my-title="{$image.img_basic_name}" data-rel="popover" data-placement="top" data-content="{$image.img_basic_abstract}"  >{$image.img_basic_name}</span>
+                                                    </td>
+                                                   
+                                                    <td>{$image.img_basic_os}</td>
+                                                    <td><empty name="image.img_basic_num">32<else/>{$image.img_basic_num}</empty></td>
+                                                    <td><empty name="image.img_basic_size">0<else/>{$image.img_basic_size}</empty></td>
+                                                    <td><if condition="($image.img_basic_attribute eq 0)"><span class="label label-sm label-warning">系统</span>
+                                                        <else /><span class="label label-sm label-blue">自建</span></if>
+                                                    </td>
+                  
+                                                
+                                                   
+                                                    <td>
+                                                        <div>
+                                                          <eq name="image.img_basic_attribute" value="0">
+                                                             <button class="my_btn my_btn_sm my_btn_gray"  title="您没有权限" data-rel="tooltip" data-placement="top" value="{$image.id}">
+                                                                <i class="icon-edit bigger-120"></i>
+                                                            </button>
+                                                            <else/>
+                                                            <a href="{:U('admin.php/System/imageEdit',array('imgId'=>$image['img_basic_id']))}" style="text-decoration: none;">
+                                                                <button class="my_btn my_btn_sm my_btn_green edit" title="编辑" data-rel="tooltip" data-placement="top">
+                                                                    <i class="icon-edit bigger-120" ></i>
+                                                                </button>
+                                                            </a>
+                                                           </eq>
+                                                            <a style="text-decoration: none;">
+                                                                <button class="my_btn my_btn_sm my_btn_green renew" title="恢复" data-rel="tooltip" data-placement="top" name="{$image.img_basic_id}">
+                                                                    <i class="icon-undo bigger-120" ></i>
+                                                                </button>
+                                                            </a>
+                                                            
+                                                             <eq name = "image.img_basic_attribute" value ='0'>
+                                                                 <button class="my_btn my_btn_sm my_btn_gray"  title="您没有权限" data-rel="tooltip" data-placement="top"  value="{$image.img_basic_id}"  style="margin-left: 5px;">
+                                                                    <i class="icon-trash bigger-120"></i>
+                                                                </button>
+                                                                <else/>
+                                                                <a style="text-decoration: none;">
+                                                                   
+                                                                    <button class="my_btn my_btn_sm my_btn_red edit delete" title="删除" data-rel="tooltip" data-placement="top" name="{$image.img_basic_id}">
+                                                                        <i class="icon-trash bigger-120" ></i>
+                                                                    </button>
+                                                                    
+                                                                </a>
+                                                            </eq>
+                                                        </div>    
+                                                        
+                                                        
+                                                    </td>
+                                                </tr>
+                                            </volist>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </case>
+            <case value="course">
+                <div class="row">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="table-responsive" >
+                                <table id="sample-table-1" class="table table-striped  table-hover" >
+                                    <thead>
+                                      <tr>
+                                         
+                                          <!-- <th>序号</th> -->
+                                            <th style="width:120px;text-align:center">序号</th>
+
+                                            <th>镜像名称</th>
+                                             <th>创建者</th>
+                                            <th>映射端口</th>
+                                            <th>网卡数</th>
+                                            <th>技术/工具/靶场/工程名称</th>
+                                            <th>类型</th>
+                                            <th>父镜像名称</th>
+                                          
+                                            
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                   
+                                        <volist name="list" id="image" key="k">
+                                            <tr>
+                                                
+                                               
+                                               <td style="width:120px;text-align:center">{$k}</td>
+
+                                                <td>
+                                                <span class="spanshow" my-title="{$image.img_course_name}" data-rel="popover" data-placement="top" data-content="{$image.img_basic_abstract}"  >{$image.img_course_name}</span>
+                                                </td>
+                                                <td><empty name="image.img_creator">系统<else/>{$image.img_creator}</empty></td>
+                        
+                                                <td>{$image.device_mapping_port}</td>
+                                                <td>{$image.device_nic_num}</td>
+                                                <td>{$image.exp_name}</td>
+                                                <td>派生</td>
+                                                <td>{$image.img_basic_name}</td>
+         
+                                            </tr>
+                                        </volist>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </case>
+            <case value='instance'>
+             <div class="row">
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-responsive" >
+                                    <table id="sample-table-1" class="table table-striped  table-hover" >
+                                        <thead>
+                                          <tr>
+                                              
+                                            <!--   <th class="center" style="width:50px;padding-left:30px">
+                                                  <label>
+                                                      <input type="checkbox" class="ace" name="images"/>
+                                                      <span class="lbl"></span>
+                                                  </label>
+                                              </th> -->
+                                            
+                                              <!-- <th>序号</th> -->
+                                                <th style="width:120px;text-align:center">序号</th>
+
+                                                <th>镜像名称</th>
+                                                <th>创建者</th>
+                                                <th>创建时间</th>
+                                                <th>大小</th>
+                                                <th>技术/工具/靶场/工程名称</th>
+                                                <th>父镜像的名称</th>
+                                                <th>操作</th>
+                                                
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                       
+                                            <volist name="list" id="image" key="k">
+                                                <tr>
+                                                     <!-- <td class="center" style="width:50px;padding-left:30px">
+                                                        <label>
+                                                            <input type="checkbox" class="ace"   value="{$image.img_instance_id}"  name="instance"/>
+                                                            <span class="lbl"></span>
+                                                        </label>
+                                                    </td> -->
+                                                   
+                                                   <td style="width:120px;text-align:center">{$k}</td>
+
+                                                    <td><span class="spanshow" my-title="{$image.img_instance_name}" data-rel="popover" data-placement="top" data-content="{$image.img_basic_abstract}"  >{$image.img_instance_name}</span></td>
+                                                   
+                                                    <td>{$image.real_name}</td>
+                                                    <td><empty name="image.img_instance_cretime">0000-00-00<else/>{$image.img_instance_cretime}</td></empty>
+                                                    <td><empty name="image.size">0KB<else/>{$image.size}</td></empty>
+                                                    <td>{$image.exp_name}</td>
+                                                    <td>{$image.img_course_name}</td>
+                                                    <td>
+                                                        <div>
+                                                          
+                                                            <a style="text-decoration: none;">
+                                                                <button class="my_btn my_btn_sm my_btn_red edit delete titleshow" title="删除" name="{$image.img_instance_id}">
+                                                                    <i class="icon-trash bigger-120" ></i>
+                                                                </button>
+                                                            </a>
+                                                            
+                                                        </div>    
+                                                        
+                                                        
+                                                    </td>
+                                                </tr>
+                                            </volist>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </case>
+        </switch>
+ </html>
+
+<load href="__PUBLIC__/js/bootbox.js" />
+
+<script>
+ 
+jQuery(function($){
+
+        $('[data-rel=tooltip]').tooltip();
+
+        $(".delete").click(function(){
+             
+            var str = new Array();
+            var id = $(this).attr("name");
+            
+            str.push(id);
+            
+            isdel(str,"delete");
+       });
+        
+      var type = "{$attribute}";
+
+       function isdel(str,option)
+       {
+            if(str.length==0) return '';
+
+            switch(option){
+                case "delete":
+
+                       bootbox.confirm("确认删除吗?",function(re){
+                            if(re){
+                                $.ajax({
+                                type:"POST",
+                                data:{type:type,str:str},
+                                url:"{:U('admin.php/System/imageDelete')}",
+                                dataType:"json",
+                                success:function(data){
+                                        if(data == "success"){
+                                            bootbox.alert("删除成功！");
+                                            currContent();
+                                        
+                                        }else{
+                                            bootbox.alert("删除失败！请重新删除。");
+                                        }
+                                        
+                                    }
+                                });
+                            }else{
+                                $(':checkbox').attr('checked',false);
+                                return true;
+                            }
+                       });
+                            
+                    
+                break;
+                case "renew":
+                    bootbox.confirm("确认恢复吗?",function(re){
+                          if(re){
+
+                            $.ajax({
+                            type:"POST",
+                            data:{str:str},
+                            url:"{:U('admin.php/System/imageRenew')}",
+                            dataType:"json",
+                            success:function(data){
+                              
+                                    if(data == "success"){
+                                        bootbox.alert("恢复成功！");
+                                        currContent();
+                                    }else{
+                                        bootbox.alert("恢复失败！请重试。");
+                                    }
+                                    
+                                }
+                            });
+                        }else{
+                            
+                            return true;
+                        }
+                    });
+                break;
+
+            }
+             
+       } 
+
+
+        function currContent(){
+        var name = $("#myTab").find('.active').attr("name");
+        
+        var searchtext = $("#nav-search input").val();
+        //var group_id = $("#progroup .showcolor2").attr("name");
+        var url = "{:U('admin.php/System/imageList/attribute/"+name+"/type/all/searchtext/"+searchtext+"')}";
+        getHTML(url);
+
+     }
+     function getHTML(url)
+      {
+         var obj = $.ajax({url: url, async: false});
+         //$("#SYSTEM").html();
+         $("#SYSTEM").html(obj.responseText);
+      }
+
+});
+    
+</script>
+
+

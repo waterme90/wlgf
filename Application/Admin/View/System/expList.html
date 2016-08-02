@@ -1,0 +1,205 @@
+<div class="page-header" style="border-bottom:0px;padding-bottom:0px;">
+        <a class="my_btn my_btn_xs my_btn_green checkAll" my-option="import" style="margin: 0px 10px 20px 20px;"title="导入课件" data-rel="tooltip" data-placement="top"  >
+            <i class="icon-cloud-upload bigger-120"></i>
+            导入
+        </a>
+         <a class="my_btn my_btn_xs my_btn_green checkAll" my-option="export" style="margin: 0px 10px 20px 20px;"title="导出课件"data-rel="tooltip" data-placement="top" >
+            <i class="icon-cloud-download  bigger-120"></i>
+            导出
+        </a>
+        <a class="my_btn my_btn_xs my_btn_red bootbox-confirm checkAll" my-option='delete' style="margin: 0px 10px 20px 20px;" title="删除课件" data-rel="tooltip" data-placement="top" >
+            <i class="icon-trash bigger-120"></i>
+            删除
+        </a>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="table-responsive" >
+                    <table id="sample-table-1" class="table table-striped  table-hover" >
+                        <thead>
+                          <tr>
+                              
+                              <th class="center" style="width:50px;padding-left:30px">
+                                  <label>
+                                      <input type="checkbox" class="ace" />
+                                      <span class="lbl"></span>
+                                  </label>
+                              </th>
+                            
+                              <!-- <th>序号</th> -->
+                                <th style="width:120px;text-align:center">序号</th>
+
+                                <th>实验ID</th>
+                                <th>实验名称</th>
+                              
+                                <th>实验属性</th>
+                                <th>实验分类</th>
+                                <th>操作</th>
+                                
+                          </tr>
+                        </thead>
+                        <tbody>
+                       
+                            <volist name="list" id="exp" key="k">
+                                <tr>
+                                     <td class="center" style="width:50px;padding-left:30px">
+                                        <label>
+                                            <input type="checkbox" class="ace"   value="{$exp.exp_id}"  name="exps"/>
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </td>
+                                   
+                                   <td style="width:120px;text-align:center">{$k}</td>
+                                   <td>{$exp.exp_sn}</td>
+
+                                    <td>
+                                    <span class="spanshow" my-title="{$exp.exp_abstract}" data-rel="popover" data-placement="top" data-content="{$exp.exp_abstract}"  >{$exp.exp_name}</span>
+                                    </td>
+                                    <td><eq name="exp.exp_attribute" value="0"><span class="label label-sm label-warning">系统</span><else/><span class="label label-sm label-blue">自建</span></eq></td>
+                                    <td>
+                                        <switch name="exp.type">
+                                            <case value="0">技术专项</case>
+                                            <case value="1">工具培训</case>
+                                            <case value="2">靶场集训</case>
+                                            <case value="3">工程应用</case>
+                                        </switch>
+                                    </td>
+
+                                    <td>
+                                        <div>
+                                         
+                                            <a href="{:U('admin.php/System/expImport',array('exp_sn'=>$exp['exp_sn']))}" style="text-decoration: none;">
+                                                <button class="my_btn my_btn_sm my_btn_green edit delete" my-option="import" name="{$exp.exp_id}" title="导入课件" data-rel="tooltip" data-placement="top" >
+                                                    <i class="icon-cloud-upload bigger-120" ></i>
+                                                </button>
+                                            </a>
+                                          
+                                            <a href="{:U('admin.php/System/expExport',array('exp_sn'=>$exp['exp_sn']))}"style="text-decoration: none;">
+                                                <button class="my_btn my_btn_sm my_btn_green  edit delete" my-option="export" name="{$exp.exp_id}" title="导出课件" data-rel="tooltip" data-placement="top"name="{$exp.img_basic_id}">
+                                                    <i class="icon-cloud-download  bigger-120" ></i>
+
+                                                </button>
+                                            </a>
+                                            
+                                            
+                                            <a style="text-decoration: none;">
+                                               <button class="my_btn my_btn_sm my_btn_red edit delete" my-option="delete" name="{$exp.exp_id}" title="删除课件" data-rel="tooltip" data-placement="top" name="{$exp.exp_id}">
+                                                    <i class="icon-trash bigger-120" ></i>
+                                                </button>
+                                            </a>
+                                          
+                                        </div>    
+                                        
+                                        
+                                    </td>
+                                </tr>
+                            </volist>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__PUBLIC__/js/bootbox.js"></script>
+<script>
+      $('[data-rel=tooltip]').tooltip();
+      //全选
+      $('table th input:checkbox').on('click' , function(){
+                var that = this;
+                $(this).closest('table').find('tr > td:first-child input:checkbox')
+                        .each(function(){
+                            this.checked = that.checked;
+                            $(this).closest('tr').toggleClass('selected');
+                        });
+
+     });
+
+
+   //全选
+   $(".checkAll").click(function(){
+       
+        var str = new Array();
+        var i=0;
+
+        //$(':checkbox').attr('checked','checked');
+        var len = $('[name=exps]:checkbox:checked').length;
+      
+        $('[name=exps]:checkbox:checked').each(function(){
+            
+            str.push($(this).val());
+        });
+
+        var option = $(this).attr("my-option");
+       
+        isdel(str,option);
+        
+   });
+   //单个操作
+   $(".delete").click(function(){
+        var option = $(this).attr("my-option");
+        
+        var id = $(this).attr("name");
+        var str = new Array();
+        str.push(id);
+        isdel(str,option);
+   });
+
+   //str:要操作的实验ID  my-option:操作项目
+   function isdel(str,option)
+   {
+
+        if(str.length==0) return bootbox.alert("请在左侧勾选");
+        var conMsg,url;
+        switch(option){
+            case "delete":
+                 conMsg = "确认删除吗?";
+                 url = "{:U('admin.php/System/expDelete')}";
+               
+            break;
+            case "import":
+                 conMsg = "确认导入更新后的全部课件吗？";
+                 url = "{:U('admin.php/System/expImport')}";
+
+            break;
+            case "export":
+                 conMsg = "确认导出当前实验吗?";
+                 url = "{:U('admin.php/System/expExport')}";
+            break;
+           
+            default:break;
+        }
+        if(option=='delete'||option=='import'||option=='export')
+            ajaxData(str,conMsg,url);   
+        
+   }
+     function ajaxData(str,conMsg,url){
+            bootbox.confirm(conMsg,function(re){
+                if(re){
+
+                    $.ajax({
+                    type:"POST",
+                    data:{str:str},
+                    url:url,
+                    dataType:"json",
+                    success:function(data){
+
+                            bootbox.alert(data.info);
+                            currContent();                   
+                           
+                        }
+                    });
+                    return true;
+
+                }else{
+                    $(':checkbox').attr('checked',false);
+
+                    return true;
+                }
+
+            });   
+   } 
+   
+</script>

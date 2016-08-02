@@ -1,0 +1,200 @@
+<div class="main-container" id="main-container">
+	<script type="text/javascript">
+		try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+	</script>
+
+	<div class="main-container-inner">
+		<a class="menu-toggler" id="menu-toggler" href="#">
+			<span class="menu-text"></span>
+		</a>
+
+		<div class="sidebar" id="sidebar">
+			<script type="text/javascript">
+				try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+			</script>
+			<!-- <div style="width:100%;height:10px"></div> -->
+
+			<ul class="nav nav-list">
+				<li>
+					<a href="#" class="dropdown-toggle">
+						<i class="icon-group"></i>
+						<span class="menu-text"> 用户管理 </span>
+						<b class="arrow icon-angle-down"></b>
+					</a>
+					<ul class="submenu">
+						<li>
+							<a href="{:U('admin.php/AdminUser/showClassInfo')}">
+								<i class="icon-double-angle-right"></i>
+								组管理
+							</a>
+						</li>
+						<li>
+							<a href="{:U('admin.php/AdminUser/showUserInfo')}">
+								<i class="icon-double-angle-right"></i>
+								用户管理
+							</a>
+						</li>
+						<!-- <li>
+							<a href="#">
+								<i class="icon-double-angle-right"></i>
+								注册审核
+							</a>
+						</li> -->
+						<li>
+							<a href="{:U('admin.php/AdminUser/showBlackUserInfo')}">
+								<i class="icon-double-angle-right"></i>
+								黑名单管理
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#" class="dropdown-toggle">
+						<i class="icon-book"></i>
+						<span class="menu-text"> 知识库管理 </span>
+						<b class="arrow icon-angle-down"></b>
+					</a>
+					<ul class="submenu">
+						<li>
+							<a href="{:U('admin.php/AdminVideo/index')}">
+								<i class="icon-double-angle-right"></i>
+								视频
+							</a>
+						</li>
+						<li>
+							<a href="{:U('admin.php/AdminExp/index')}">
+								<i class="icon-double-angle-right"></i>
+								技术专项
+							</a>
+						</li>
+						<li class="train">
+							<a href="{:U('admin.php/AdminTooltrain/index')}">
+								<i class="icon-double-angle-right"></i>
+								工具培训
+							</a>
+							<!-- 	<li class="direction" style="padding-left: 20px;display:none;">
+									<a href="">
+										<i class="icon-double-angle-right"></i>
+										技术方向
+									</a>
+								</li>
+								<li class="train_exp" style="padding-left: 20px;display:none;">
+									<a href="">
+										<i class="icon-double-angle-right"></i>
+										培训实验
+									</a>
+								</li> -->
+						</li>
+						<li>
+							<a href="{:U('admin.php/AdminTar/index')}">
+								<i class="icon-double-angle-right"></i>
+								靶场集训
+							</a>
+						</li>
+						<li>
+							<a href="{:U('admin.php/AdminPro/index')}">
+								<i class="icon-double-angle-right"></i>
+								工程应用
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#" class="dropdown-toggle">
+						<i class="icon-briefcase"></i>
+						<span class="menu-text"> 工具中心 </span>
+						<b class="arrow icon-angle-down"></b>
+					</a>
+					<ul class="submenu">
+						<li>
+							<a href="{:U('admin.php/AdminWorkstation/index')}">
+								<i class="icon-double-angle-right"></i>
+								工作站
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#" class="dropdown-toggle">
+						<i class="icon-cogs"></i>
+						<span class="menu-text"> 系统管理 </span>
+						<b class="arrow icon-angle-down"></b>
+					</a>
+					<ul class="submenu">
+						<li>
+							<a href="{:U('admin.php/System/imageIndex')}">
+								<i class="icon-double-angle-right"></i>
+								镜像管理
+							</a>
+						</li>
+						<li>
+							<a href="{:U('admin.php/System/expIndex')}">
+								<i class="icon-double-angle-right"></i>
+								课件管理
+							</a>
+						</li>
+						<li>
+							<a href="{:U('admin.php/System/domainIndex')}">
+								<i class="icon-double-angle-right"></i>
+								虚拟机管理
+							</a>
+						</li>
+						<li>
+							<a href="{:U('admin.php/System/hostIndex')}">
+								<i class="icon-double-angle-right"></i>
+								集群管理
+							</a>
+						</li>
+						
+						
+						<li>
+							<a href="{:U('admin.php/System/networkIndex')}">
+								<i class="icon-double-angle-right"></i>
+								网络设置
+							</a>
+						</li>
+						<li>
+							<a href="{:U('admin.php/System/diskIndex')}">
+								<i class="icon-double-angle-right"></i>
+								磁盘管理
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#" class="dropdown-toggle">
+						<i class="icon-facetime-video"></i>
+						<span class="menu-text"> 监控管理 </span>
+						<b class="arrow icon-angle-down"></b>
+					</a>
+					<ul class="submenu">
+						<li>
+							<a href="{:U('admin.php/Monitoring/topoMonitoring')}">
+								<i class="icon-double-angle-right"></i>
+								监控拓扑
+							</a>
+						</li>
+						<li>
+							<a href="{:U('admin.php/MonitoringUser/getVideoMonthById')}">
+								<i class="icon-double-angle-right"></i>
+								用户监控
+							</a>
+						</li>
+						<li>
+							<a href="{:U('admin.php/Monitoring/hostMonitoring')}">
+								<i class="icon-double-angle-right"></i>
+								主机监控
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul><!-- /.nav-list -->
+
+			<div class="sidebar-collapse" id="sidebar-collapse">
+				<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+			</div>
+
+			<script type="text/javascript">
+				try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+			</script>
+		</div>

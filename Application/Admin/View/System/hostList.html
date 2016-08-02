@@ -1,0 +1,153 @@
+<div class="page-header" style="border-bottom:0px;padding-bottom:0px;">
+       
+      <a href="{:U('admin.php/System/hostNew')}"class="my_btn my_btn_xs my_btn_green" style="margin: 0px 10px 20px 20px;" title="添加集群节点" data-rel="tooltip" data-placement="top" >
+           <!--  <i class="icon-trash bigger-120"></i> -->
+            <i class="icon-plus-sign bigger-120"></i>
+            添加节点
+        </a>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="table-responsive" >
+                    <table id="sample-table-1" class="table table-striped  table-hover" >
+                        <thead>
+                          <tr>
+                              
+                             <!--  <th class="center" style="width:50px;padding-left:30px">
+                                  <label>
+                                      <input type="checkbox" class="ace"/>
+                                      <span class="lbl"></span>
+                                  </label>
+                              </th> -->
+                            
+                              <!-- <th>序号</th> -->
+                                <th style="width:120px;text-align:center">序号</th>
+
+                                <th>主机IP</th>
+                                <th>系统版本</th>
+                                <th>状态</th>
+                                <th>运行虚拟机数</th>
+                                <th>操作</th>
+                               
+                                
+                          </tr>
+                        </thead>
+                        <tbody>
+                       
+                            <volist name="list" id="host" key="k">
+                                <tr>
+                                     <!-- <td class="center" style="width:50px;padding-left:30px">
+                                        <label>
+                                            <input type="checkbox" class="ace"   value="{$host.host_id}"  name="hosts"/>
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </td>    -->
+                                   
+                                   <td style="width:120px;text-align:center">{$k}</td>
+                                   <td>{$host.host_ip}</td>
+                                   <td><empty name="host.host_version">无<else/>{$host.host_version}</td></empty>
+                                   <td><eq name ="host.host_state" value='0'><span class="label label-sm label-blue">关机</span><else/><span class="label label-sm label-warning">运行</span></eq></td>
+                                   <td><span class="" style="color: #9abc32;font-weight: bold;font-family: 微软雅黑;">{$host.domain_num}</span></td>
+                                   
+                                    <td>
+                                        <div>
+                                          <a style="text-decoration: none;">
+                                           <button class="my_btn my_btn_sm my_btn_green delete" my-option="update" title="系统更新" data-rel="tooltip" data-placement="top" name="{$host.host_id}">
+                                                <i class="icon-wrench bigger-120" ></i>
+                                            </button>
+                                        </a>
+                                         <a style="text-decoration: none;">
+                                               <button class="my_btn my_btn_sm my_btn_red delete" my-option="close" title="强制关机" data-rel="tooltip" data-placement="top" name="{$host.host_id}">
+                                                    <i class="icon-remove bigger-120" ></i>
+                                                </button>
+                                        </a>
+                                        <a style="text-decoration: none;">
+                                               <button class="my_btn my_btn_sm my_btn_red delete" my-option="delete" title="删除节点" data-rel="tooltip" data-placement="top" name="{$host.host_id}">
+                                                    <i class="icon-trash bigger-120" ></i>
+                                                </button>
+                                        </a>
+                                        
+                                      </div>
+                                    </td>
+                                </tr>
+                            </volist>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="__PUBLIC__/js/bootbox.js"></script>
+<script>
+  $('[data-rel=tooltip]').tooltip();
+  
+
+    //单个操作
+   $(".delete").click(function(){
+        var option = $(this).attr("my-option");
+        
+        var id = $(this).attr("name");
+        var str = new Array();
+        str.push(id);
+        isdel(str,option);
+   });
+    //str:要操作的实验ID  my-option:操作项目
+   function isdel(str,option)
+   {
+
+        if(str.length==0) return bootbox.alert("请在左侧勾选");
+        var conMsg,url;
+        switch(option){
+            case "delete":
+                 conMsg = "确认删除节点吗?";
+                 url = "{:U('admin.php/System/hostRemove')}";
+               
+            break;
+            case "update":
+                 conMsg = "确认更新系统吗?";
+                 url = "{:U('admin.php/System/hostUpdate')}";
+
+            break;
+            case "close":
+                 conMsg = "确认关闭当前服务器吗?";
+                 url = "{:U('admin.php/System/hostShutdown')}";
+            break;
+           
+            default:break;
+        }
+        if(option=='delete'||option=='close'||option=='update')
+            ajaxData(str,conMsg,url);   
+        
+   }
+     function ajaxData(str,conMsg,url){
+            bootbox.confirm(conMsg,function(re){
+                if(re){
+
+                    $.ajax({
+                    type:"POST",
+                    data:{str:str},
+                    url:url,
+                    dataType:"json",
+                    success:function(data){
+
+                            bootbox.alert(data.info);
+                            currContent();                   
+                           
+                        }
+                    });
+                    return true;
+
+                }else{
+                    $(':checkbox').attr('checked',false);
+
+                    return true;
+                }
+
+            });   
+   } 
+</script>

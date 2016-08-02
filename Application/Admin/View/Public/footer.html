@@ -1,0 +1,67 @@
+
+    </div><!-- /.main-container-inner -->
+</div><!-- /.main-container -->
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='__PUBLIC__/assets/js/jquery-2.0.3.min.js'>"+"<"+"script>");
+</script>
+
+<!-- <![endif]-->
+
+
+<script type="text/javascript">
+    if("ontouchend" in document) document.write("<script src='__PUBLIC__/assets/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
+</script>
+<load href="__PUBLIC__/assets/js/bootstrap.min.js" />
+<load href="__PUBLIC__/assets/js/typeahead-bs2.min.js" />
+
+<!-- page specific plugin scripts -->
+
+<load href="__PUBLIC__/assets/js/jquery.dataTables.min.js" />
+<!-- <load href="__PUBLIC__/assets/js/jquery.dataTables.bootstrap.js" /> -->
+
+<!-- ace scripts -->
+
+<load href="__PUBLIC__/assets/js/ace-elements.min.js" />
+<load href="__PUBLIC__/assets/js/ace.min.js" />
+
+<load href="__PUBLIC__/assets/js/date-time/bootstrap-datepicker.min.js" />
+<!-- <load href="__PUBLIC__/assets/js/jqGrid/jquery.jqGrid.min.js" /> -->
+<!-- <load href="__PUBLIC__/assets/js/jqGrid/i18n/grid.locale-en.js" /> -->
+<!-- inline scripts related to this page -->
+
+<script type="text/javascript">
+    jQuery(function($) {
+        var oTable1 = $('#sample-table-2').dataTable( {
+            "aoColumns": [
+                { "bSortable": false },
+                null, null,null, null, null,
+                { "bSortable": false }
+            ] } );
+        //好像有问题
+       $('table th input:checkbox').on('click' , function(){
+            var that = this;
+            $(this).closest('table').find('tr > td:first-child input:checkbox')
+                    .each(function(){
+                        this.checked = that.checked;
+                        $(this).closest('tr').toggleClass('selected');
+                    });
+
+        });
+    });
+    function selectCheckbox(){
+        $('table th input:checkbox').on('click' , function(){
+           $("tbody>tr>td input:checkbox").attr('checked',this.checked);
+
+        });
+    }
+          
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        .head{height:50px;}
+        .table1{float:center;}
+        .menu-head{line-height: 20px; }
+        .sub{height: 32px;}
+        a{text-decoration: none;}
+        .vm_list_li{list-style:none;line-height: 32px;}
+        .popover-box{position:absolute;width:200px;}
+        .popover-content{padding:0px;}
+        .vm_list_li{float:left; }
+        .vm_name_list{ float: left;}
+        .vm_check{float:left;padding:0 10px }
+        .close-vm,.close-cancel{padding-left:25px;}
+    </style>
+</head>
+<body>
+<layout name="layout"/>
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+    </script>
+
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="#" id="text1"></a>
+        </li>
+        <li class="active" id="text2"></li>
+    </ul><!-- .breadcrumb -->
+
+    <div class="nav-search" id="nav-search">
+        <form class="form-search" action="{:U('admin.php/Virtual/host')}" id="search" method="get">
+                    <span class="input-icon">
+                        <input type="text" name="searchtext" value="{$searchtext}" placeholder="按主机IP搜索" class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                        <i class="icon-search nav-search-icon" onclick="document.getElementById('search').submit();"></i>
+                    </span>
+        </form>
+    </div><!-- #nav-search -->
+</div>
+
+<div class="page-content">
+    <div class="page-header" style="border-bottom:0px;padding-bottom:0px;padding-left:0px;">
+        <button class="my_btn my_btn_xs my_btn_green add" >
+            <i class="icon-plus-sign bigger-120"></i>
+            添加节点
+        </button>
+        <button class="my_btn my_btn_xs my_btn_red del_all" >
+            <i class="icon-trash bigger-120"></i>
+            全选删除
+        </button>
+        <button class="my_btn my_btn_xs my_btn_red close_all">
+            <i class="icon-remove bigger-120"></i>
+            全选关闭
+        </button>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+
+            <div class="row">
+                <div class="col-xs-12 table1" >
+                    <div class="table-responsive">
+                        <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th class="center" >
+                                    <label>
+                                        <input type="checkbox" class="ace" />
+                                        <span class="lbl"></span>
+                                    </label>
+                                </th>
+                                <th style="width:120px;text-align: center;">
+                                    序号
+                                </th>
+                                <th style="width:482px;">主机IP</th>
+
+                                <th style="width:131px;">状态</th>
+                                <th style="width:131px;">操作</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <volist name="list" id="result" empty="暂时没有数据">
+                            <tr>
+                                <td class="center" style="width:50px;padding-left:30px">
+                                    <label>
+                                        <input type="checkbox" name="check_close_all" class="ace check" value="{$result.host_id}"/>
+                                        <span class="lbl"></span>
+                                    </label>
+                                </td>
+                                <td class="center id" style="width:120px;text-align: center;">
+                                    {$i}
+                                </td>
+
+                                <td class="ll" style="padding-top: 0;line-height: 10px;">
+                                    <!-- <span class="mirname" title="{$result.host_ip}">{$result.host_ip}  -->
+                                    <span class="mirname" title="{$result.host_ip}" style="position: absolute;">{$result.host_ip}
+                                        <!-- <span class="green vm_show" data-rel="popover" title="虚拟机列表"  data-content="" >
+                                            <i class="icon-zoom-in bigger-100"></i>
+                                        </span> -->
+                                    </span>
+                                </td>
+                                <td>
+                                    <switch name="result.host_state">
+                                        <case value="0"><span class="mirstatus">启用</span></case>
+                                        <default/><span class="mirstatus" style="color:red;">禁用</span>
+                                    </switch>
+                                </td>
+                                <td>
+                                    <div>
+                                        <button class="my_btn my_btn_sm my_btn_red del_host bootbox-confirm" data-toggle="tooltip"  title="删除"
+                                                value="{$result.host_ip}">
+                                            <i class="icon-trash bigger-120"></i>
+                                        </button>
+                                        <button class="my_btn my_btn_sm my_btn_red close_host" data-toggle="tooltip" title="关闭" value="{$result.host_id}" style="margin-left: 5px;">
+                                            <i class="icon-remove bigger-120"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </volist>
+                            </tbody>
+                        </table>
+                    </div><!-- /.table-responsive -->
+                </div><!-- /span -->
+            </div><!-- /row -->
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="__PUBLIC__/assets/js/jquery-2.0.3.min.js"/></script>
+<script src="__PUBLIC__/assets/js/bootbox.min.js"></script>
+<script>
+$(function(){
+    pLeftMenu(3,3);
+    /**************确认框***************/
+    var hostid;
+    var vmname;
+    //删除一个
+    $(".del_host").unbind(ace.click_event).on(ace.click_event, function(event){
+        hostip = $(this).val();
+        bootbox.confirm("确认删除该节点吗?", function(result) {
+            if(result){
+                del_node(hostip);
+            }
+        });
+    });
+    //删除多个
+    $(".del_all").click(function(event){
+        hostid='';
+        $("input[name=check_close_all]:checkbox:checked").each(function(){
+             hostid= hostid + $(this).val()+",";
+        });
+        bootbox.confirm("确认删除该节点吗?", function(result) {
+            if(result){
+                bootbox.alert(hostid);
+            }
+        });
+
+    });
+    //删除节点
+    function del_node(host_ip){
+        $.ajax({
+            type:"GET",
+            url:"{:U('admin.php/Virtual/del_host')}",
+            data:{'host_ip':host_ip},
+            success:function(data){
+                bootbox.alert(data,(function(){
+                    window.location.reload();
+                }));
+            }
+        });
+    }
+    /**************确认框***************/
+    var $vmshow = $(".vm_show");
+    /*************放大镜显示****************/
+ /*  $(".mirname").mouseover(function(){
+       if($vmshow.is(":visible") == true){
+           $vmshow.hide();
+       }
+       $(this).css("cursor","pointer");
+       $(this).find('span').css("display","inline-block");
+   }).mouseout(function(){
+      if($vmshow.is(":visible") == true){
+        if($vmshow.next("div").is(":visible") == false){
+            $vmshow.hide();
+        }
+      }
+   });*/
+    /*************放大镜显示****************/
+    $("[data-toggle='tooltip']").tooltip(); //提示框
+    $('[data-rel=tooltip]').tooltip();
+    $('[data-rel=popover]').popover({html:true});
+    var host_ip='';
+   /* $vmshow.hover(function(){
+        host_ip = $(this).parent('span').attr('title');
+        $.ajax({
+            url:"{:U('admin.php/Virtual/host')}",
+            data:{host_ip:host_ip},
+            dataType:"json",
+            type:"GET",
+            success:function(data){
+                var str = '';
+                $.each(data,function(key,value) {
+                    var param =(value.vm_name).split('@');
+                    str+="<li class='vm_list_li'><span class='vm_check' ><input type='checkbox' name='check' value='"+value.vm_name+"'/></span><span class='vm_name_list'>"+param[0]+"</span></li>";
+                });
+                str+="<li class='vm_list_li' style='padding:10px 25px 10px 0;border-top: 1px solid #ddd;'><span class='close-vm'><button class='my_btn my_btn_sm my_btn_gray vmclose' type='button' style='width:50px;'>关闭</button></span><span class='close-cancel'><button class='my_btn my_btn_sm my_btn_gray cancelclose' type='button' style='width:50px;'>取消</button></span></li>";
+                $(".vm_show").attr("data-content",str);
+            }
+        });
+    });*/
+    //$vmshow.click(function(){
+        /*$vmshow.next("div").mouseleave(function(){
+            $(this).prev().trigger("click");
+            $(this).prev().hide();
+        });*/
+        /*$(".cancelclose").click(function(){
+            $("input[name=check]:checkbox:checked").each(function(){
+                $(this).attr("checked",false);
+            });
+        });
+        $(".vmclose").click(function(){
+             $("input[name=check]:checkbox:checked").each(function(){
+                  vmname += $(this).val() + ',';
+             });
+            $.ajax({
+                url:"{:U('admin.php/Virtual/vm_del')}",
+                data:{vm_name:vmname},
+                type:"GET",
+                dataType:"json",
+                success:function(data){
+                    alert(data);
+                    //使所有选中的复选框成未选中状态
+                    $("input:checkbox:checked").each(function(){
+                        $(this).attr("checked",false);
+                    });
+                }
+            });
+
+         });
+
+    });*/
+    /*获取虚拟机复选框的值*/
+});
+
+</script>
+
+</html>

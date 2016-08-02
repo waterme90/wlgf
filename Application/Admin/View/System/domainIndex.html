@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <layout name="layout"/>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+    </script>
+
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="#" id="text1"></a>
+        </li>
+        <li class="active" id="text2"></li>
+    </ul><!-- .breadcrumb -->
+
+    <div class="nav-search" id="nav-search">
+      <span class="input-icon">按分类查询
+       <select class="select" id="ExpType" style="width:100px;">
+          <option value="all">全部</option>
+          <option value="0">技术专项</option>
+          <option value="1">工具培训</option>
+          <option value="2">靶场集训</option>
+          <option value="3">工程应用</option>
+       
+        </select>
+      </span>
+            <span class="input-icon">
+                <input type="text" name="searchtext"  placeholder="关键词搜索" class="nav-search-input" id="nav-search-input" autocomplete="off" value="{$searchtext}"/>
+                <i class="icon-search nav-search-icon"></i>
+            </span>
+    </div><!-- #nav-search -->
+</div>
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- <div class="row"> -->
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs" id="myTab">
+                     
+                        </ul>
+                        <div class="tab-content">
+                        	 <div id="DOMAIN"></div>
+                          
+                        </div>
+                    </div>
+                <!-- </div>/span -->
+        </div>
+    </div>
+</div><!-- /.page-content -->
+</body>
+<script src="__PUBLIC__/js/jquery.min.js"></script>
+<script>
+   
+jQuery(function($){
+        pLeftMenu(4,3);
+        $('[data-rel=tooltip]').tooltip();
+       
+        init();
+         //搜索的触发出件
+      $("#nav-search").find("input").keydown(function(e){
+        if(e.keyCode == 13){
+          
+          currContent();
+        }
+      });
+        
+     
+
+      function init(){
+       
+          //初始化
+          currContent();
+      }
+
+   
+     
+      function currContent(){
+        
+        
+        var searchtext = $("#nav-search input").val();
+        var type = $("#ExpType").children("option:selected").val();
+       
+        //var group_id = $("#progroup .showcolor2").attr("name");
+        var url = "{:U('admin.php/System/domainList/type/"+type+"/searchtext/"+searchtext+"')}";
+        getHTML(url);
+
+     }
+     function getHTML(url)
+      {
+         var obj = $.ajax({url: url, async: false});
+         //$("#SYSTEM").html();
+         $("#DOMAIN").html(obj.responseText);
+      }
+
+
+
+      $("#ExpType").change(function(){
+        //var type = $(this).children("option:selected").val();
+        currContent();
+      })
+
+    });
+</script>
+
+</html>
+

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <layout name="layout"/>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+    </script>
+
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="#" id="text1"></a>
+        </li>
+        <li class="active" id="text2"></li>
+    </ul><!-- .breadcrumb -->
+
+    <div class="nav-search" id="nav-search">
+            <span class="input-icon">
+                <input type="text" name="searchtext"  placeholder="关键词搜索" class="nav-search-input" id="nav-search-input" autocomplete="off" value="{$searchtext}"/>
+                <i class="icon-search nav-search-icon"></i>
+            </span>
+    </div><!-- #nav-search -->
+</div>
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- <div class="row"> -->
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class='active' name="basic">
+                                <a data-toggle="tab" >
+                                    基础镜像
+                                </a>
+                            </li >
+
+                            <li name="course">
+                                <a data-toggle="tab" >
+                                    课件镜像
+                                </a>
+                            </li>
+
+                            <li name="instance">
+                                <a data-toggle="tab"  >
+                                   实例镜像
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                        	 <div id="SYSTEM"></div>
+                          
+                        </div>
+                    </div>
+                <!-- </div>/span -->
+        </div>
+    </div>
+</div><!-- /.page-content -->
+</body>
+
+
+</html>
+ <script>
+
+ </script>
+
+<script>
+   
+jQuery(function($){
+
+
+        $('[data-rel=tooltip]').tooltip();
+        pLeftMenu(4,1);
+      
+        var attribute = "{$attribute}";
+
+        init();
+    
+        
+        var span =  $("#myTab");
+
+        function init(){
+         
+            //初始化
+           
+
+            $(span).find('.active').click();//注意find中属性的单双引号
+            currContent();
+        }
+
+        $(span).find('li').click(function(){
+            
+            $(this).addClass("active");
+            $(this).siblings().removeClass("active");
+            currContent();
+        });
+        //搜索的触发出件
+        $("#nav-search").find("input").keydown(function(e){
+          if(e.keyCode == 13){
+            
+            currContent();
+          }
+        });
+        function currContent(){
+          var name = $("#myTab").find('.active').attr("name");
+          
+          var searchtext = $("#nav-search input").val();
+          //var group_id = $("#progroup .showcolor2").attr("name");
+          var url = "{:U('admin.php/System/imageList/attribute/"+name+"/type/all/searchtext/"+searchtext+"')}";
+          getHTML(url);
+
+       }
+       function getHTML(url)
+        {
+           var obj = $.ajax({url: url, async: false});
+           //$("#SYSTEM").html();
+           $("#SYSTEM").html(obj.responseText);
+        }
+
+
+
+    });
+</script>

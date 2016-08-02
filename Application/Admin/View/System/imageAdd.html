@@ -1,0 +1,321 @@
+<layout name="layout"/>
+<load href="__PUBLIC__/assets/js/jquery-2.0.3.min.js"/>
+<meta charset="utf-8"/>
+<body>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+    </script>
+
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="#" id="text1"></a>
+        </li>
+        <li class="active"><a href="{:U('admin.php/System/imageIndex', array('attribute'=>'basic'))}">镜像管理</a></li>
+        <li class="active">上传镜像</li>
+    </ul><!-- .breadcrumb -->
+</div>
+<div class="page-content">
+    <div class="space-12"></div>
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <form class="form-horizontal" role="form" id="form1" method="post" enctype="multipart/form-data" action="{:U('admin.php/System/imageUpload')}">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 镜像名称</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="form-field-1" placeholder="镜像名称" class="col-xs-10 col-sm-5 name" name="img_basic_name"/>
+                      <!--   <label class="col-xs-10 col-sm-5 warnning" style="color:red;"></label> -->
+                       <label class="warnning-lable1" id="img_basic_name" for="form-field-1" style="color:red"></label>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="form-field-2">操作系统 </label>
+
+                    <div class="col-sm-9">
+                        <input type="text" id="form-field-2" placeholder="操作系统" class="col-xs-10 col-sm-5 os" name="img_basic_os"/>
+
+                       <label class="warnning-lable2" id="img_basic_os" for="form-field-1" style="color:red"></label>
+
+                    </div>
+                </div>
+                <div class="space-4"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="form-field-3">镜像位数 </label>
+                    <div class="col-sm-5">
+                        <select name = "img_basic_num"> 
+                            <option value='8'>8</option> 
+                            <option value='16'>16</option>
+                            <option value='32'>32</option>
+                            <option value='64'>64</option>
+                            <option value='128'>128</option>
+                        </select>
+                    </div>
+                 
+                </div>
+                <div class="space-4"></div>
+                 <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="form-field-3">所属分类 </label>
+                    <div class="col-sm-6">
+                        <select name="subgroup_id" id= "image_group"> 
+                          <volist name = "group" id="group">
+                                <option value='{$group.group_id}'>{$group.group_name}</option>
+                          </volist>  
+                        </select>
+                    </div>
+                   
+                </div>
+                <div class="space-4"></div>
+                 <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="form-field-3">所属子类 </label>
+                    <div class="col-sm-6">
+                        <select name="subgroup_id" id= "image_subgroup"> 
+                       <!--    <volist name = "subgroup" id="subgroup"> -->
+<!--                                 <option value='{$subgroup.subgroup_id}'>{$subgroup.subgroup_name}</option>
+ -->                         <!--  </volist>   -->
+                        </select>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right"  for="id-input-file-2">上传镜像</label>
+                    <div class="col-sm-9">
+                        <div class="col-xs-10 col-sm-5" style="padding-left:0px;padding-right:0px;">
+                            <input type="file" id="id-input-file-1" class="col-xs-10 col-sm-3 file" name="file" accept=".img"/>
+                          
+                        </div>
+                        <label class="col-xs-10 col-sm-5" style="color:#188E87;">注：请上传.img的镜像文件</label>
+                    </div>
+                </div>
+
+                <div class="clearfix form-actions">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button class="my_btn my_btn_xs my_btn_green imageSubmit" type="submit">
+                            <i class="icon-ok bigger-110"></i>
+                            上传
+                        </button>
+                        &nbsp; &nbsp; &nbsp;
+                        <button class="my_btn my_btn_xs my_btn_gray" type="reset">
+                            <i class="icon-undo bigger-110"></i>
+                           取消
+                        </button>
+                    </div>
+                </div>
+            </form>
+    </div><!-- /.row -->
+</div><!--.page-content-->
+</body>
+<script src="__PUBLIC__/assets/js/ace-elements.min.js"></script>
+<script src="__PUBLIC__/assets/js/bootbox.min.js"></script>
+<script>
+$(function(){
+        pLeftMenu(4,1);
+
+        $('#id-input-file-1 , #id-input-file-2').ace_file_input({
+            no_file:'No File ...',
+            droppable:false,
+            onchange:null,
+            thumbnail:false //| true | large
+            //whitelist:'gif|png|jpg|jpeg'
+            //blacklist:'exe|php'
+            //onchange:''
+            //
+        });
+        $('#id-file-format').removeAttr('checked').on('change', function() {
+            var before_change
+            var btn_choose
+            var no_icon
+            if(this.checked) {
+                btn_choose = "Drop images here or click to choose";
+                no_icon = "icon-picture";
+                before_change = function(files, dropped) {
+                    var allowed_files = [];
+                    for(var i = 0 ; i < files.length; i++) {
+                        var file = files[i];
+                        if(typeof file === "string") {
+                            //IE8 and browsers that don't support File Object
+                            if(! (/\.(jpe?g|png|gif|bmp)$/i).test(file) ) return false;
+                        }
+                        else {
+                            var type = $.trim(file.type);
+                            if( ( type.length > 0 && ! (/^image\/(jpe?g|png|gif|bmp)$/i).test(type) )
+                                    || ( type.length == 0 && ! (/\.(jpe?g|png|gif|bmp)$/i).test(file.name) )//for android's default browser which gives an empty string for file.type
+                            ) continue;//not an image so don't keep this file
+                        }
+
+                        allowed_files.push(file);
+                    }
+                    if(allowed_files.length == 0) return false;
+
+                    return allowed_files;
+                }
+            }
+            else {
+                btn_choose = "Drop files here or click to choose";
+                no_icon = "icon-cloud-upload";
+                before_change = function(files, dropped) {
+                    return files;
+                }
+            }
+        });
+        $("#image_group").first().click();
+        $("#image_group").click(function(){
+            var group_id = $(this).children('option:selected').val();
+            $.ajax({
+                type:"GET",
+                data:{group_id:group_id},
+                url:"{:U('admin.php/System/getSubgroup')}",
+                dataType:"json",
+                success:function(data){
+                    if(!data) alert("错误");
+                    var parent = $("#image_subgroup");
+                    $(parent).html("");
+                    $.each(data,function(){
+                        $(parent).append("<option value='"+this.subgroup_id+"'>"+this.subgroup_name+"</option>");
+
+                    });
+                }
+            });
+        });
+        $("#image_group").click();
+        /*---------------------begin---------------------*/
+        //输入验证
+       
+        function inputCheck(inputobj)
+        {
+            //init();
+            var name = $(inputobj).attr("name");
+            var flag = true;
+           
+            switch(name){
+                case "img_basic_name":
+                    var reg = /^[a-zA-Z0-9\u4E00-\u9FA5]{1}[\w-.+@#\u4E00-\u9FA5]{2,49}$/;
+                    if(!reg.test($(inputobj).val())){
+                        flag = false;
+                    }
+                    
+                    checkName($(inputobj));
+                    break;
+                case "img_basic_os":
+                    var reg = /^[a-zA-Z0-9\u4E00-\u9FA5]{1}[\w-.+@#\u4E00-\u9FA5]{2,49}$/;
+                    if(!reg.test($(inputobj).val())){
+                        flag = false;
+                    }
+                    break;
+                case "file":break;
+            }
+            if(!flag){
+                switch(name)
+                {
+                    case "img_basic_name": $(".warnning-lable1").html("请输入50位以内字符，首字符为数字或字母！");break;
+                    case "img_basic_os":   $(".warnning-lable2").html("输入非法，请重新输入！");break;
+
+                }
+            }else{
+                switch(name)
+                {
+                    case "img_basic_name": $(".warnning-lable1").html("OK!");break;
+                    case "img_basic_os":   $(".warnning-lable2").html("OK!");break;
+
+                }
+            }
+            return flag;
+        }  
+        function init(inputobj){
+            var name = $(inputobj).attr("name");
+            switch(name)
+            {
+                case "img_basic_name": $(".warnning-lable1").html("");break;
+                case "img_basic_os":   $(".warnning-lable2").html("");break;
+            }
+        }
+         $("#form1 :input").focus(function(){
+            init($(this));
+        });      
+        $("#form1 :input").blur(function(){
+            inputCheck($(this));
+        });   
+        
+        $("#form1").submit(function(){
+            var isfalse = false;
+            $("#form1 :input").each(function(){
+                if(!inputCheck($(this))){
+                    isfalse = true;
+                    
+                    alert("请按要求输入！");
+                    return false;
+                    //break;
+                }
+            });
+            if(isfalse){
+                 return false;
+            }else{
+                 bootbox.dialog({
+                    message: "<span class='bigger-110'>正在上传镜像，请耐心等待！</span>"
+                });
+                return true;
+            }
+                
+        });
+        function checkName(obj){
+           
+            var img_basic_name = $(obj).val();
+
+            if(img_basic_name!=''){
+                $.ajax({
+                    type:"GET",
+                    data:{img_basic_name:img_basic_name},
+                    url:"{:U('admin.php/System/imageNameCheck')}",
+                    dataType:"json",
+                    success:function(data){
+                      
+                      switch(data){
+
+                            case "success":
+                             
+                                break;
+                            case "repeat":
+
+                                $(".warnning-lable1").html("该名称已存在，请重新输入！");
+
+                                break;
+                            default:break;
+                        }
+                    }
+                });
+            }           
+          
+        }
+        // $(":input[name=img_basic_name]").blur(function(){ 
+        //     flag = true;
+        //     var img_basic_name = $("[name=img_basic_name]").val();
+        //     if(img_basic_name!=''){
+        //         $.ajax({
+        //             type:"GET",
+        //             data:{img_basic_name:img_basic_name},
+        //             url:"{:U('admin.php/System/imageNameCheck')}",
+        //             dataType:"json",
+        //             success:function(data){
+        //               switch(data){
+        //                     case "success":
+        //                         //$(".warnning-lable1").html("");break;
+        //                     case "repeat":
+        //                         //$(".warnning-lable1").html("该名称已存在，请重新输入！");
+        //                         flag = false;
+        //                         break;
+        //                     default:break;
+        //                 }
+        //             }
+        //         });
+        //     }
+        //     return flag;
+        // });
+        /*-----------------end-----------------------*/
+})
+    
+
+
+</script>
